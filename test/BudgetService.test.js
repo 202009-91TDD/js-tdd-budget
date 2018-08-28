@@ -4,6 +4,7 @@ import BudgetService from '../src/BudgetService';
 
 let DB = {
   getAll: () => ({
+    '201712': 31,
     '201801': 310,
     '201802': 280,
     '201805': 3100,
@@ -49,4 +50,8 @@ test('cross different month with different date of same year with budget: 201807
 
 test('cross 2 months with different date of same year with budget: 20180730 - 20180903', t => {
   t.is(budget.queryBudget(moment('2018-05-01'), moment('2018-08-31')), 4030)
+})
+
+test('cross years with different date of same year with budget: 20171231 - 20180101', t => {
+  t.is(budget.queryBudget(moment('2017-12-31'), moment('2018-01-31')), 311)
 })

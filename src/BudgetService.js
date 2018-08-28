@@ -27,12 +27,8 @@ class BudgetService {
       sumBudget += endMonthBudget;
       const diffMonth = endDate.diff(startDate, 'months')
       if (diffMonth >= 2) {
-        const startInternalMonth = startDate.month() + 2
-        const endInternalMonth = endDate.month() + 1
-        for (let i = startInternalMonth; i < endInternalMonth; i++) {
-          const monthString = moment([startDate.year(), i - 1]).format('YYYYMM')
-          const monthBudget = this.budgets[monthString]
-          sumBudget += monthBudget
+        for (var m = moment(startDate).add(1, 'M'); m.isBefore(moment(endDate).add(-1, 'M')); m.add(1, 'months')) {
+          sumBudget += this.budgets[moment(m).format('YYYYMM')]
         }
       }
       return sumBudget
