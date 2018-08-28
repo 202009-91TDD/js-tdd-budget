@@ -47,6 +47,6 @@ test('cross different month with different date of same year with budget: 201807
   t.is(budget.queryBudget(moment('2018-07-30'), moment('2018-08-07')), 110)
 })
 
-// test('cross 2 months with different date of same year with budget: 20180730 - 20180903', t => {
-//   t.is(budget.queryBudget(moment('2018-05-01'), moment('2018-08-31')), 4030)
-// })
+test('cross 2 months with different date of same year with budget: 20180730 - 20180903', t => {
+  t.is(budget.queryBudget(moment('2018-05-01'), moment('2018-08-31')), 4030)
+})
