@@ -30,6 +30,9 @@ const queryBudget = (startDate, endDate, budgets) => {
 
 const getDaysBudget = (monthString, days, budgets) => {
     const monthTotalDays = moment(monthString, 'YYYYMM').daysInMonth()
+    if (!budgets[monthString]) {
+        return 0
+    }
     return budgets[monthString] / monthTotalDays * days
 }
 

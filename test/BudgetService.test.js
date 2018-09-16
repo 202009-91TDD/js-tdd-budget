@@ -13,18 +13,28 @@ const budgets = {
 }
 
 test('invalid period.', t => {
+    const budgets = {
+        '201801': 310
+    }
     t.is(queryBudget(moment('2018-01-02'), moment('2018-01-01'), budgets), 0)
 })
 
 test('same date with budget', t => {
+    const budgets = {
+        '201802': 280
+    }
     t.is(queryBudget(moment('2018-02-01'), moment('2018-02-01'), budgets), 10)
 })
 
 test('same month with different date with budget', t => {
+    const budgets = {
+        '201808': 310
+    }
     t.is(queryBudget(moment('2018-08-10'), moment('2018-08-20'), budgets), 110)
 })
 
 test('same month with different date without budget', t => {
+    const budgets = {}
     t.is(queryBudget(moment('2018-06-10'), moment('2018-06-20'), budgets), 0)
 })
 
