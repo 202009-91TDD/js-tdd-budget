@@ -21,7 +21,7 @@ const queryBudget = (startDate, endDate, budgets) => {
         const diffMonth = endDate.diff(startDate, 'months')
         if (diffMonth >= 2) {
             for (var m = moment(startDate).add(1, 'M'); m.isBefore(moment(endDate).add(-1, 'M')); m.add(1, 'months')) {
-                sumBudget += budgets[moment(m).format('YYYYMM')]
+                sumBudget += budgets[moment(m).format('YYYYMM')] ? budgets[moment(m).format('YYYYMM')] : 0
             }
         }
         return sumBudget
