@@ -13,14 +13,11 @@ const queryBudget = (startDate, endDate, budgets) => {
         return getDaysBudget(startMonth, diffDate, budgets)
     } else {
         let sumBudget = 0
-        const totaStartlLeftDays = moment(startMonth + startDate.daysInMonth()).diff(startDate, 'Days') + 1
-        const startMonthBudget = getDaysBudget(startMonth, totaStartlLeftDays, budgets);
-        sumBudget += startMonthBudget;
-        const endMonthBudget = getDaysBudget(endMonth, endDate.date(), budgets);
-        sumBudget += endMonthBudget;
-        const diffMonth = endDate.diff(startDate, 'months')
-        if (diffMonth >= 2) {
-            for (var m = moment(startDate).add(1, 'M'); m.isBefore(moment(endDate).add(-1, 'M')); m.add(1, 'months')) {
+        const totalStartLeftDays = moment(startDate).endOf('month').diff(startDate, 'Days') + 1
+        sumBudget += getDaysBudget(startMonth, totalStartLeftDays, budgets);
+        sumBudget += getDaysBudget(endMonth, endDate.date(), budgets);
+        if (endDate.diff(startDate, 'months') >= 2) {
+            for (let m = moment(startDate).add(1, 'month'); m.isBefore(moment(endDate).add(-1, 'month')); m.add(1, 'month')) {
                 sumBudget += budgets[moment(m).format('YYYYMM')] ? budgets[moment(m).format('YYYYMM')] : 0
             }
         }
@@ -29,11 +26,11 @@ const queryBudget = (startDate, endDate, budgets) => {
 }
 
 const getDaysBudget = (monthString, days, budgets) => {
-    const monthTotalDays = moment(monthString, 'YYYYMM').daysInMonth()
     if (!budgets[monthString]) {
         return 0
     }
-    return budgets[monthString] / monthTotalDays * days
+    const lengthOfMonth = moment(monthString, 'YYYYMM').daysInMonth()
+    return budgets[monthString] / lengthOfMonth * days
 }
 
 module.exports = queryBudget
