@@ -15,12 +15,11 @@ const getBudget = (budgets, dateInBudget) => {
     const amount = budgets[dateInBudget.format('YYYYMM')];
     return {
         amount: amount ? amount : 0,
-        month: dateInBudget,
         period: {startDate: moment(dateInBudget).startOf('month'), endDate: moment(dateInBudget).endOf('month')}
     }
 }
 
-const getDailyAmount = budget => budget.amount / budget.month.daysInMonth()
+const getDailyAmount = budget => budget.amount / getDayCount(budget.period)
 
 const getDayCount = period => period.endDate.diff(period.startDate, 'days') + 1
 
