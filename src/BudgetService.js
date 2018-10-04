@@ -5,10 +5,14 @@ const queryBudget = (startDate, endDate, budgets) => {
         return getDailyAmount(getBudget(budgets, startDate)) * getDayCount(startDate, endDate)
     } else {
         let sumBudget = 0
-        sumBudget += getDailyAmount(getBudget(budgets, startDate)) * getDayCount(startDate, moment(startDate).endOf('month'))
-        sumBudget += getDailyAmount(getBudget(budgets, endDate)) * getDayCount(moment(endDate).startOf('month'), endDate)
+
+        const firstBudget = getBudget(budgets, startDate);
+        sumBudget += getDailyAmount(firstBudget) * getDayCount(startDate, getEndDate(firstBudget))
+        const lastBudget = getBudget(budgets, endDate);
+        sumBudget += getDailyAmount(lastBudget) * getDayCount(getStartDate(lastBudget), endDate)
         for (let m = moment(startDate).add(1, 'month'); m.isBefore(moment(endDate).add(-1, 'month')); m.add(1, 'month')) {
-            sumBudget += getDailyAmount(getBudget(budgets, m)) * getDayCount(moment(m).startOf('month'), moment(m).endOf('month'))
+            const budget = getBudget(budgets, m);
+            sumBudget += getDailyAmount(budget) * getDayCount(getStartDate(budget), getEndDate(budget))
         }
         return sumBudget
     }
@@ -23,10 +27,12 @@ const getBudget = (budgets, dateInBudget) => {
     }
 }
 
-const getDailyAmount = (budget) => {
-    return budget.amount / budget.month.daysInMonth()
-}
+const getDailyAmount = budget => budget.amount / budget.month.daysInMonth()
 
 const getDayCount = (startDate, endDate) => endDate.diff(startDate, 'days') + 1
+
+const getEndDate = budget => moment(budget.month).endOf('month')
+
+const getStartDate = budget => moment(budget.month).startOf('month')
 
 module.exports = queryBudget
