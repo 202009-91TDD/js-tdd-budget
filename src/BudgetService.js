@@ -13,7 +13,7 @@ const queryBudget = (startDate, endDate, budgets) => {
         sumBudget += getDailyAmount(budgets, endDate) * endDate.date()
         if (endDate.diff(startDate, 'months') >= 2) {
             for (let m = moment(startDate).add(1, 'month'); m.isBefore(moment(endDate).add(-1, 'month')); m.add(1, 'month')) {
-                sumBudget += budgets[moment(m).format('YYYYMM')] ? budgets[moment(m).format('YYYYMM')] : 0
+                sumBudget += getDailyAmount(budgets, m) * m.daysInMonth()
             }
         }
         return sumBudget
