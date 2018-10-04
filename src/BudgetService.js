@@ -5,14 +5,15 @@ const queryBudget = (startDate, endDate, budgets) => {
     let sumBudget = 0
 
     for (const [monthStr, amount] of Object.entries(budgets)) {
-        const budget = createBudget(monthStr, amount)
-        sumBudget += getDailyAmount(budget) * getOverlappingDayCount(period, budget.period)
+        sumBudget += getOverlappingAmount(budget(monthStr, amount), period)
     }
 
     return sumBudget
 }
 
-const createBudget = (monthStr, amount) => {
+const getOverlappingAmount = (budget, period) => getDailyAmount(budget) * getOverlappingDayCount(period, budget.period)
+
+const budget = (monthStr, amount) => {
     return {
         amount,
         period: {
