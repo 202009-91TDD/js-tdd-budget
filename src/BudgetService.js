@@ -4,18 +4,21 @@ const queryBudget = (startDate, endDate, budgets) => {
     const period = {startDate, endDate};
     let sumBudget = 0
 
-    for (let m = moment(startDate).startOf('month'); m.isSameOrBefore(moment(endDate)); m.add(1, 'month')) {
-        const budget = getBudget(budgets, m);
+    for (const [monthStr, amount] of Object.entries(budgets)) {
+        const budget = createBudget(monthStr, amount)
         sumBudget += getDailyAmount(budget) * getOverlappingDayCount(period, budget.period)
     }
+
     return sumBudget
 }
 
-const getBudget = (budgets, dateInBudget) => {
-    const amount = budgets[dateInBudget.format('YYYYMM')];
+const createBudget = (monthStr, amount) => {
     return {
-        amount: amount ? amount : 0,
-        period: {startDate: moment(dateInBudget).startOf('month'), endDate: moment(dateInBudget).endOf('month')}
+        amount,
+        period: {
+            startDate: moment(`${monthStr}01`, "YYYYMMDD").startOf('month'),
+            endDate: moment(`${monthStr}01`, "YYYYMMDD").endOf('month')
+        }
     }
 }
 
