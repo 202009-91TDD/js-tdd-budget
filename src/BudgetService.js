@@ -1,19 +1,15 @@
 const moment = require('moment')
 
 const queryBudget = (startDate, endDate, budgets) => {
-
-    const diffDate = endDate.diff(startDate, 'days') + 1
-
     if (startDate.format('YYYYMM') === endDate.format('YYYYMM')) {
-        return getDailyAmount(budgets, startDate) * diffDate
+        return getDailyAmount(budgets, startDate) * (endDate.diff(startDate, 'days') + 1)
     } else {
         let sumBudget = 0
-        const totalStartLeftDays = moment(startDate).endOf('month').diff(startDate, 'Days') + 1
-        sumBudget += getDailyAmount(budgets, startDate) * totalStartLeftDays
-        sumBudget += getDailyAmount(budgets, endDate) * endDate.date()
+        sumBudget += getDailyAmount(budgets, startDate) * (moment(startDate).endOf('month').diff(startDate, 'Days') + 1)
+        sumBudget += getDailyAmount(budgets, endDate) * (endDate.diff(moment(endDate).startOf('month'), 'Days') + 1)
         if (endDate.diff(startDate, 'months') >= 2) {
             for (let m = moment(startDate).add(1, 'month'); m.isBefore(moment(endDate).add(-1, 'month')); m.add(1, 'month')) {
-                sumBudget += getDailyAmount(budgets, m) * m.daysInMonth()
+                sumBudget += getDailyAmount(budgets, m) * (moment(m).endOf('month').diff(moment(m).startOf('month'), 'Days') + 1)
             }
         }
         return sumBudget
