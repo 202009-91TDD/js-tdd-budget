@@ -3,9 +3,6 @@ const moment = require('moment')
 const queryBudget = (startDate, endDate, budgets) => {
 
     const diffDate = endDate.diff(startDate, 'days') + 1
-    if (diffDate < 1) {
-        return 0
-    }
 
     const startMonth = startDate.format('YYYYMM')
     const endMonth = endDate.format('YYYYMM')
