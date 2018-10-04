@@ -1,24 +1,20 @@
 const moment = require('moment')
 
 const queryBudget = (startDate, endDate, budgets) => {
-    const period = {startDate, endDate};
-    let sumBudget = 0
-
-    for (const [monthStr, amount] of Object.entries(budgets)) {
-        sumBudget += getOverlappingAmount(budget(monthStr, amount), period)
-    }
-
-    return sumBudget
+    return Object.entries(budgets)
+        .map(budget)
+        .map(budget => getOverlappingAmount(budget, {startDate, endDate}))
+        .reduce((a, b) => a + b, 0)
 }
 
 const getOverlappingAmount = (budget, period) => getDailyAmount(budget) * getOverlappingDayCount(period, budget.period)
 
-const budget = (monthStr, amount) => {
+const budget = (entry) => {
     return {
-        amount,
+        amount: entry[1],
         period: {
-            startDate: moment(`${monthStr}01`, "YYYYMMDD").startOf('month'),
-            endDate: moment(`${monthStr}01`, "YYYYMMDD").endOf('month')
+            startDate: moment(`${entry[0]}01`, "YYYYMMDD").startOf('month'),
+            endDate: moment(`${entry[0]}01`, "YYYYMMDD").endOf('month')
         }
     }
 }
